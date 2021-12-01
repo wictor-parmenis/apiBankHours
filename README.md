@@ -1,4 +1,4 @@
-# apiBankHours
+# API - bank of hours
 API aimed at counting the number of hours worked full-time or halt-time. [UNDER DEVELOPMENT]
 
 # Stack
