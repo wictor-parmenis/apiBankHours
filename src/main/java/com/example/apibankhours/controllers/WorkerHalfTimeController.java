@@ -12,42 +12,42 @@ import java.util.Optional;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/api/v1")
+@RequestMapping("/api/v1/workers/halftime")
 public class WorkerHalfTimeController {
 
     @Autowired
     private WorkerHalfTimeRepository repository;
 
-    @PostMapping("/workers/halftime")
+    @PostMapping("/")
     public ResponseEntity<String> save(@RequestBody WorkerHalfTimeModel worker) {
         repository.save((worker));
         return new ResponseEntity<>("User sucessfully registered.", HttpStatus.OK);
     }
 
-    @GetMapping("/worker/halftime")
+    @GetMapping("/")
     public ResponseEntity<List<WorkerHalfTimeModel>> index() {
         List<WorkerHalfTimeModel> listWorkers = repository.findAll();
         return new ResponseEntity<>(listWorkers, HttpStatus.OK);
     }
 
 
-    @GetMapping("/api/v1/worker/halftime/{id}")
-    public ResponseEntity<String> get(@PathVariable UUID worker_id) {
-        Optional<WorkerHalfTimeModel> worker = repository.findById(worker_id);
+    @GetMapping("/{id}")
+    public ResponseEntity<Optional<WorkerHalfTimeModel>> get(@PathVariable String id) {
+        Optional<WorkerHalfTimeModel> worker = repository.findById(id);
         if (worker.isEmpty()) {
-            return new ResponseEntity<>("Worker not found.", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(worker, HttpStatus.NOT_FOUND);
         } else {
-            return new ResponseEntity<>("User sucessfully registered.", HttpStatus.OK);
+            return new ResponseEntity<>(worker, HttpStatus.OK);
         }
     }
 
-    @DeleteMapping("/api/v1/worker/halftime/{id}")
-    public ResponseEntity<String> delete(@PathVariable UUID worker_id) {
-        Optional<WorkerHalfTimeModel> worker = repository.findById(worker_id);
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> delete(@PathVariable String id) {
+        Optional<WorkerHalfTimeModel> worker = repository.findById(id);
         if (worker.isEmpty()) {
             return new ResponseEntity<>("Worker not found.", HttpStatus.BAD_REQUEST);
         } else {
-            repository.deleteById(worker_id);
+            repository.deleteById(id);
             return new ResponseEntity<>("User sucessfully deleted.", HttpStatus.OK);
         }
     }

@@ -14,7 +14,7 @@ import java.util.UUID;
 @Document(collection = "WorkerHalfTime")
 public class WorkerHalfTimeModel {
     @Id
-    private UUID id;
+    private String id;
 
     private String name;
     private String cpf;

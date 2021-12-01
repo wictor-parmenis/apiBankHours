@@ -6,7 +6,7 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 
 import java.util.UUID;
 
-public interface WorkerHalfTimeRepository extends MongoRepository<WorkerHalfTimeModel, UUID> {
+public interface WorkerHalfTimeRepository extends MongoRepository<WorkerHalfTimeModel, String> {
 
 
 }
