@@ -1,5 +1,6 @@
 package com.example.apibankhours.models;
 
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -12,15 +13,16 @@ import java.util.UUID;
 @Setter
 @Getter
 @Document(collection = "WorkerHalfTime")
-public class WorkerHalfTimeModel {
+public class WorkerHalfTimeModel extends Worker {
+
     @Id
     private String id;
+    private String course;
 
-    private String name;
-    private String cpf;
-    private String jobName;
-    private String email;
-    private float extraHoursWorked;
-    private float totalHoursWorked;
-    private String level;
+    @Builder
+    public WorkerHalfTimeModel(String course, String name, String cpf, String jobName, String email,float totalHoursWorked, String level) {
+        super(name, cpf, jobName, email,totalHoursWorked, level);
+        this.setCourse(course);
+        this.setId(id);
+    }
 }
