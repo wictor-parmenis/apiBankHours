@@ -1,0 +1,1 @@
+{"indexes":[{"v":{"$numberInt":"2"},"key":{"_id":{"$numberInt":"1"}},"name":"_id_"}],"uuid":"6f7f544a21934464905003087fcde3ba","collectionName":"WorkerHalfTime","type":"collection"}

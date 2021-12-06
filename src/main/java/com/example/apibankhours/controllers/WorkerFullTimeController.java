@@ -1,12 +1,10 @@
 package com.example.apibankhours.controllers;
 
-import com.example.apibankhours.Exception.ApiExceptionError;
-import com.example.apibankhours.Exception.ApiRequestError;
+import com.example.apibankhours.exceptions.CustomErrorException;
 import com.example.apibankhours.models.Response;
 import com.example.apibankhours.models.WorkerFullTimeModel;
-import com.example.apibankhours.models.WorkerHalfTimeModel;
 import com.example.apibankhours.repositories.WorkerFullTimeRepository;
-import com.example.apibankhours.repositories.WorkerHalfTimeRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,6 +14,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/api/v1/worker/fulltime")
 public class WorkerFullTimeController {
 
@@ -24,8 +23,17 @@ public class WorkerFullTimeController {
 
     @PostMapping("/")
     public ResponseEntity<Response> save(@RequestBody WorkerFullTimeModel worker) {
+        List<WorkerFullTimeModel> userExist = repository.findByEmail(worker.getEmail());
+        System.out.println(userExist);
+        if (!userExist.isEmpty()) {
+            throw new CustomErrorException(
+                    HttpStatus.BAD_REQUEST,
+                    "User already exist."
+            );
+        }
+
         repository.save(worker);
-        return new ResponseEntity<>(new Response("User sucessfully created.", true, 201), HttpStatus.OK);
+        return new ResponseEntity<>(new Response("User successfully created.", true, 201), HttpStatus.OK);
     }
 
     @GetMapping("/")
@@ -39,9 +47,9 @@ public class WorkerFullTimeController {
     public ResponseEntity<Optional<WorkerFullTimeModel>> get(@PathVariable String id) {
         Optional<WorkerFullTimeModel> worker = repository.findById(id);
         if (worker.isEmpty()) {
-            return new ResponseEntity<>(worker, HttpStatus.NOT_FOUND);
+            throw new NullPointerException("User not found");
         } else {
-            return new ResponseEntity<>(worker, HttpStatus.OK);
+             return new ResponseEntity<>(worker, HttpStatus.OK);
         }
     }
 
@@ -49,10 +57,10 @@ public class WorkerFullTimeController {
     public ResponseEntity<Response> delete(@PathVariable String id) {
         Optional<WorkerFullTimeModel> worker = repository.findById(id);
         if (worker.isEmpty()) {
-            return new ResponseEntity<>(new Response("User not found.", true, 400), HttpStatus.BAD_REQUEST);
+            throw new NullPointerException("User not found");
         } else {
             repository.deleteById(id);
-            return new ResponseEntity<>(new Response("User sucessfully deleted.", true, 201), HttpStatus.OK);
+            return new ResponseEntity<>(new Response("User successfully deleted.", true, 201), HttpStatus.OK);
         }
     }
 
@@ -62,7 +70,7 @@ public class WorkerFullTimeController {
         Optional<WorkerFullTimeModel> workerExist = repository.findById(id);
 
         if (workerExist.isEmpty()) {
-            return new ResponseEntity<>(new Response("User not found.", true, 400), HttpStatus.BAD_REQUEST);
+            throw new NullPointerException("User not found");
         }
 
         WorkerFullTimeModel currentWorker = workerExist.get();
@@ -89,7 +97,7 @@ public class WorkerFullTimeController {
         }
 
         repository.save(currentWorker);
-        return new ResponseEntity<>(new Response("User sucessfully updated.", true, 201), HttpStatus.OK);
+        return new ResponseEntity<>(new Response("User successfully updated.", true, 201), HttpStatus.OK);
     }
 }
 
